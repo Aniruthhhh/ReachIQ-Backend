@@ -1,0 +1,98 @@
+// This is your Prisma schema file
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Customer {
+  id               String   @id @default(cuid())
+  name             String
+  email            String   @unique
+  phone            String
+  city             String
+  age              Int
+  gender           String
+  industry         String   @default("D2C Brand")
+  created_at       DateTime @default(now())
+  last_purchase    DateTime?
+  total_spent      Float    @default(0)
+  engagement_score Float    @default(0)
+
+  orders         Order[]
+  communications Communication[]
+
+  @@map("customers")
+}
+
+model Order {
+  id          String   @id @default(cuid())
+  customer_id String
+  amount      Float
+  category    String
+  created_at  DateTime @default(now())
+
+  customer Customer @relation(fields: [customer_id], references: [id])
+
+  @@map("orders")
+}
+
+model Segment {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  query       String
+  created_at  DateTime @default(now())
+
+  campaigns Campaign[]
+
+  @@map("segments")
+}
+
+model Campaign {
+  id          String   @id @default(cuid())
+  name        String
+  segment_id  String?
+  channel     String   @default("whatsapp")
+  message     String
+  status      String   @default("draft")
+  created_at  DateTime @default(now())
+  launched_at DateTime?
+
+  segment        Segment?        @relation(fields: [segment_id], references: [id])
+  communications Communication[]
+
+  @@map("campaigns")
+}
+
+model Communication {
+  id          String   @id @default(cuid())
+  campaign_id String
+  customer_id String
+  status      String   @default("pending")
+  channel     String
+  sent_at     DateTime?
+  updated_at  DateTime @updatedAt
+
+  campaign Campaign @relation(fields: [campaign_id], references: [id])
+  customer Customer @relation(fields: [customer_id], references: [id])
+  events   Event[]
+
+  @@map("communications")
+}
+
+model Event {
+  id               String   @id @default(cuid())
+  communication_id String
+  event_type       String
+  timestamp        DateTime @default(now())
+  metadata         String   @default("{}")
+
+  communication Communication @relation(fields: [communication_id], references: [id])
+
+  @@map("events")
+}

@@ -1,0 +1,20 @@
+{
+  "name": "@reachiq/db",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "db:push": "prisma db push",
+    "db:generate": "prisma generate",
+    "seed": "tsx prisma/seed.ts",
+    "studio": "prisma studio"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.22.0"
+  },
+  "devDependencies": {
+    "prisma": "^5.22.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "@faker-js/faker": "^9.3.0"
+  }
+}

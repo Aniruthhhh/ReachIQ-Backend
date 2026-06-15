@@ -1,0 +1,19 @@
+{
+  "name": "reachiq-backend",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently --names \"API,CHANNEL\" --prefix-colors \"magenta,cyan\" \"npm run dev --workspace=apps/api\" \"npm run dev --workspace=apps/channel\"",
+    "seed": "npm run seed --workspace=apps/api",
+    "setup": "npm install && npm run setup --workspace=apps/api",
+    "db:push": "npm run db:push --workspace=apps/api",
+    "clean": "rm -rf apps/api/dist apps/channel/dist"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
